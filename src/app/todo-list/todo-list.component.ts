@@ -14,7 +14,7 @@ export class TodoListComponent implements OnInit {
 
   todos$: Observable<ReadonlyArray<Todo>>;
 
-  constructor(private store: Store) {
+  constructor(private readonly store: Store) {
     this.todos$ = this.store.select(selectTodos);
   }
 

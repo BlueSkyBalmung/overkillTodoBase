@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
 })
 export class TodoService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   list(): Observable<Todo[]> {
     return this.http.get<Todo[]>(`${environment.baseUrl}/api/todos`);

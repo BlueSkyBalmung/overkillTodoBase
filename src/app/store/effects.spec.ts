@@ -1,35 +1,34 @@
 import { TestBed } from '@angular/core/testing';
-import { StoreModule } from '@ngrx/store';
 import { Effects } from './effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
-import { Actions } from '@ngrx/effects';
-import { todosReducer } from './reducer';
+import { Actions, EffectsModule, EffectsRootModule } from '@ngrx/effects';
 import { TodoService } from '../services/todo.service';
 import { cold, hot } from 'jasmine-marbles';
 import {loadTodos, loadTodosFailed, loadTodosSuccess} from './actions';
 import { Todo } from '../models/todo';
+import { MockBuilder } from 'ng-mocks';
+import { AppModule } from '../app.module';
 
 describe('Effects', () => {
   let effects: Effects;
   let actions: Observable<Actions>;
   const todoService = jasmine.createSpyObj<TodoService>('TodoService', ['list']);
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({ todosStore: todosReducer })],
-      providers: [
-        Effects,
-        provideMockActions(() => actions),
-        {
-          provide: TodoService,
-          useValue: todoService,
-        },
-      ],
-    });
+  beforeEach(() =>
+    MockBuilder(Effects, AppModule)
+    .provide(
+        provideMockActions(() => actions)
+      )
+    .provide(
+      {
+        provide: TodoService,
+        useValue: todoService,
+      }).keep(Effects));
 
+  beforeEach(() => {
     effects = TestBed.inject(Effects);
-  });
+  })
 
   describe('loadTodos$', () => {
     it('should dispatch loadTodosSuccess action when todoService.list return a result', () => {

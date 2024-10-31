@@ -8,6 +8,9 @@ import {
 import { first } from 'rxjs/operators';
 import { Todo } from '../models/todo';
 import { environment } from '../../environments/environment';
+import { MockBuilder } from 'ng-mocks';
+import { AppModule } from '../app.module';
+import { HttpBackend, HttpClientModule, HttpHandler } from '@angular/common/http';
 
 describe('TodoService', () => {
   let service: TodoService;
@@ -29,10 +32,13 @@ describe('TodoService', () => {
     service
       .list()
       .pipe(first())
-      .subscribe((res: Todo[]) => {
-        expect(res).toEqual(mockedTodoList);
-        done();
-      }, done.fail);
+      .subscribe({
+        next: (res: Todo[]) => {
+          expect(res).toEqual(mockedTodoList);
+          done();
+        },
+        error: done.fail
+      });
 
     const req = httpMock.expectOne(
       (r) => r.url === `${environment.baseUrl}/api/todos`
@@ -40,5 +46,6 @@ describe('TodoService', () => {
     expect(req.request.method).toEqual('GET');
 
     req.flush(mockedTodoList);
+    httpMock.verify();
   });
 });
