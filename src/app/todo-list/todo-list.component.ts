@@ -1,9 +1,9 @@
+import { TodoLoadGroup, TodoUpdateGroup } from './../store/actions';
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Todo} from '../models/todo';
 import {Store} from '@ngrx/store';
-import {selectTodos} from '../store/selectors';
-import {loadTodos} from '../store/actions';
+import {selectLoading, selectTodos} from '../store/selectors';
 
 @Component({
   selector: 'app-todo-list',
@@ -13,13 +13,18 @@ import {loadTodos} from '../store/actions';
 export class TodoListComponent implements OnInit {
 
   todos$: Observable<ReadonlyArray<Todo>>;
+  loading$: Observable<boolean>;
 
   constructor(private readonly store: Store) {
     this.todos$ = this.store.select(selectTodos);
+    this.loading$ = this.store.select(selectLoading);
   }
 
   ngOnInit(): void {
-     this.store.dispatch(loadTodos());
+     this.store.dispatch(TodoLoadGroup.loadTodos());
   }
 
+  onCheck(todo: Todo): void {
+    this.store.dispatch(TodoUpdateGroup.updateTodo({ todo : {isClosed: !todo.isClosed, title: todo.title, id: todo.id } }));
+  }
 }

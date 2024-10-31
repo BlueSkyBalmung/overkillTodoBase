@@ -7,3 +7,8 @@ export const selectTodos = createSelector(
   getState,
   (state: State) => state.todos,
 );
+
+export const selectLoading = createSelector(
+  getState,
+  (state: State) => state.loading,
+);

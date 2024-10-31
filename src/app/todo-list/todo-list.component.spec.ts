@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TodoListComponent } from './todo-list.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectTodos } from '../store/selectors';
+import { selectLoading, selectTodos } from '../store/selectors';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {MockBuilder,  MockedComponent, MockRender, ngMocks} from 'ng-mocks';
 import { By } from '@angular/platform-browser';
@@ -17,16 +17,21 @@ describe('TodoListComponent', () => {
   };
 
   beforeEach(() => 
-   MockBuilder(TodoListComponent, AppModule).provide(
+   MockBuilder(TodoListComponent, AppModule)
+    .provide(
       provideMockStore({selectors: [ {
         selector: selectTodos,
         value: [
-          { id: 0, title: 'todo 1', isClosed: false, modified: new Date() },
-          { id: 1, title: 'todo 2', isClosed: true, modified: new Date() }
+          { id: 0, title: 'todo 1', isClosed: false },
+          { id: 1, title: 'todo 2', isClosed: true }
         ]
-      }]
-    })
-    ).provide({ provide: Router, useValue: router })
+      },
+      {
+        selector: selectLoading,
+        value: false
+      }
+    ]
+    })).provide({ provide: Router, useValue: router })
   );
 
   beforeEach(() => {
@@ -59,5 +64,14 @@ describe('TodoListComponent', () => {
       todoElements.map(item => item.query(By.css('mat-checkbox'))).map(item => item.componentInstance);
     expect(todoCheckboxes[0].checked).toBeFalse();
     expect(todoCheckboxes[1].checked).toBeTrue();
+  });
+
+  it('should check todos', () => {
+    ngMocks.find('mat-checkbox').triggerEventHandler('change', null);
+    fixture.detectChanges();
+    expect(store.dispatch).toHaveBeenCalled();
+    const checkboxs = ngMocks.findAll('mat-checkbox');
+    expect(ngMocks.get(checkboxs[checkboxs.length - 1], MatCheckbox).checked).toBeTrue();
+    expect(Boolean(ngMocks.get(checkboxs[checkboxs.length - 1], MatCheckbox).disabled)).toBeTrue();
   });
 });

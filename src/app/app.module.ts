@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
@@ -40,7 +41,8 @@ import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
     HttpClientInMemoryWebApiModule.forRoot(MockTodoApi),
     StoreModule.forRoot({todosStore: todosReducer}),
     EffectsModule.forRoot([Effects]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
