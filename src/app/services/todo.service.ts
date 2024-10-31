@@ -8,10 +8,22 @@ import {environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class TodoService {
-
   constructor(private http: HttpClient) { }
 
   list(): Observable<Todo[]> {
     return this.http.get<Todo[]>(`${environment.baseUrl}/api/todos`);
   }
+
+  get(id: number): Observable<Todo> {
+    return this.http.get<Todo>(`${environment.baseUrl}/api/todos/${id}`);
+  }
+
+  update(todo: Todo): Observable<Todo> {
+    return this.http.post<Todo>(`${environment.baseUrl}/api/todos/${todo.id}`, todo);
+  }
+
+  add(todo: Todo): Observable<Todo> {
+    return this.http.post<Todo>(`${environment.baseUrl}/api/todos`, todo);
+  }
+
 }

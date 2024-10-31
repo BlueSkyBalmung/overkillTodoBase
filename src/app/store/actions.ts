@@ -1,11 +1,33 @@
-import { createAction, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Todo } from '../models/todo';
 
-export const loadTodos = createAction('[Todos] Load todos');
 
-export const loadTodosSuccess = createAction(
-  '[Todos] Load todos success',
-  props<{ todos: Todo[] }>()
-);
+export const TodoLoadGroup = createActionGroup({
+  source: 'Todos',
+  events: {
+    'Load todos': emptyProps(),
+    'Load todos success': props<{ todos: Todo[] }>(),
+    'Load todos failed': emptyProps(),
+    'Load todo': props<{ id: number }>(),
+    'Load todo success': props<{ todo: Todo }>(),
+    'Load todo failed': emptyProps(),
+  }
+})
 
-export const loadTodosFailed = createAction('[Todos] Load todos failed');
+export const TodoUpdateGroup = createActionGroup({
+  source: 'Todos',
+  events: {
+    'Update todo': props<{ todo: Todo }>(),  
+    'Update todo success': props<{ todo: Todo }>(),
+    'Update todo failed': emptyProps(),
+  }
+});
+
+export const TodoAddGroup = createActionGroup({
+  source: 'Todos',
+  events: {
+    'Add todo': props<{ todo: Todo }>(),
+    'Add todo success': props<{ todo: Todo }>(),
+    'Add todo failed': emptyProps(),
+  }
+});

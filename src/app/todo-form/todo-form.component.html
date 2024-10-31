@@ -1,0 +1,19 @@
+<form [formGroup]="todosForm">
+    <mat-card>
+        <mat-card-content>
+            <div class="mb-3">
+                <mat-form-field appearance="fill">
+                    <input type="text" class="form-control" id="title" placeholder="title" formControlName="title" matInput >
+                    <mat-error *ngIf="todosForm.get('title')?.hasError('required') && todosForm.get('title')?.touched">Le titre est requis</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mb-3"> 
+                <mat-form-field appearance="fill">
+                    <input type="text" class="form-control" id="description" placeholder="Description"
+                    matInput formControlName="description"/>
+                </mat-form-field>
+            </div>
+            <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Submit</button>
+        </mat-card-content>
+    </mat-card>
+</form>
