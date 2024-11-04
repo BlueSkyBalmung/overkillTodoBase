@@ -4,8 +4,8 @@ import {selectDisplayedTodo, selectLoading, selectTodos} from './selectors';
 describe('Selectors', () => {
   const initialState: State = {
    todos: [
-     {id:0, title: 'todo1Title', isClosed: true},
-     {id:1, title: 'todo2Title', isClosed: false},
+     {id:0, title: 'todo1Title', isClosed: true, modified: new Date()},
+     {id:1, title: 'todo2Title', isClosed: false, modified: new Date()},
    ],
    loading: false
   };

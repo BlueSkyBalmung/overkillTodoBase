@@ -1,6 +1,6 @@
 import {Todo} from '../models/todo';
 import {createReducer, on} from '@ngrx/store';
-import { TodoLoadGroup, TodoUpdateGroup } from './actions';
+import { TodoAddGroup, TodoLoadGroup, TodoUpdateGroup } from './actions';
 
 export const featureKey = 'todosStore';
 
@@ -56,6 +56,16 @@ export const todosReducer = createReducer(
       todos: updateTodoList,
     };
   }),
+  on(TodoAddGroup.addTodoSuccess, (state, { todo }) => {
+    return {
+      ...state,
+      todos: [{...todo, isClosed: false}, ...state.todos],
+    }
+  })
 );
 
-export const sortTodo = (a: Todo, b: Todo) =>  (Number(a.isClosed) -  Number(b.isClosed));
+
+export const sortTodo = (a: Todo, b: Todo) =>  ((Number(a.isClosed) -  Number(b.isClosed)) !== 0 ? 
+(Number(a.isClosed) -  Number(b.isClosed)) : sortByDate(a,b));
+
+export const sortByDate = (a: Todo, b: Todo) => b.modified.getTime() - a.modified.getTime();

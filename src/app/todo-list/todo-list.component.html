@@ -7,8 +7,7 @@
           <mat-list-item *ngFor="let todo of todos$ | async">
             <h4 class="checkbox-wrapper"  [ngClass]="todo.isClosed ? 'crossed-out' : ''">
               <mat-checkbox
-                [checked]="todo.isClosed"
-                [disabled]="todo.isClosed"
+                [checked]="todo.isClosed" [disabled]="todo.isClosed"
                 (change)="onCheck(todo)"
               ></mat-checkbox>
               {{ todo.title }}
@@ -16,10 +15,17 @@
             <a mat-button color="primary" (click)="onDetailClick(todo)"><mat-icon>edit</mat-icon>Détail</a>
           </mat-list-item>
         </mat-list>
-        </ng-container>
-        <ng-container *ngIf="loading$ | async">
-          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="loading$ | async">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </ng-container>
+      <button mat-raised-button [color]="displayForm ? 'warn' : 'primary'" (click)="onAddTodo()" class="add-button">
+        <mat-icon>{{ displayForm ? 'close' : 'add' }}</mat-icon>{{ displayForm ? 'Cancel Add' : 'Add a Todo' }}
+      </button>
     </mat-card-content>
   </mat-card>
+  <div class="part-form" *ngIf="displayForm">
+    <app-todo-form></app-todo-form>
+  </div>
 </div>

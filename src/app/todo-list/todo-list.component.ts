@@ -16,6 +16,8 @@ export class TodoListComponent implements OnInit {
   todos$: Observable<ReadonlyArray<Todo>>;
   loading$: Observable<boolean>;
 
+  displayForm: boolean = false;
+
   constructor(private readonly store: Store, private readonly router: Router) {
     this.todos$ = this.store.select(selectTodos);
     this.loading$ = this.store.select(selectLoading);
@@ -26,7 +28,11 @@ export class TodoListComponent implements OnInit {
   }
 
   onCheck(todo: Todo): void {
-    this.store.dispatch(TodoUpdateGroup.updateTodo({ todo : {isClosed: !todo.isClosed, title: todo.title, id: todo.id } }));
+    this.store.dispatch(TodoUpdateGroup.updateTodo({ todo : {isClosed: !todo.isClosed, title: todo.title, id: todo.id, modified: new Date() } }));
+  }
+
+  onAddTodo(): void {
+    this.displayForm = !this.displayForm;
   }
 
   onDetailClick(todo: Todo): void {

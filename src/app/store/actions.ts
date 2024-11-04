@@ -21,3 +21,12 @@ export const TodoUpdateGroup = createActionGroup({
     'Update todo failed': emptyProps(),
   }
 });
+
+export const TodoAddGroup = createActionGroup({
+  source: 'Todos',
+  events: {
+    'Add todo': props<{ todo: Todo }>(),
+    'Add todo success': props<{ todo: Todo }>(),
+    'Add todo failed': emptyProps(),
+  }
+});

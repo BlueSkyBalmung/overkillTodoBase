@@ -22,4 +22,8 @@ export class TodoService {
   update(todo: Todo): Observable<Todo> {
     return this.http.post<Todo>(`${environment.baseUrl}/api/todos/${todo.id}`, todo);
   }
+
+  add(todo: Todo): Observable<Todo> {
+    return this.http.post<Todo>(`${environment.baseUrl}/api/todos`, todo);
+  }
 }

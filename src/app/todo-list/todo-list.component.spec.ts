@@ -80,4 +80,11 @@ describe('TodoListComponent', () => {
     todoElement.triggerEventHandler('click', null);
     expect(router.navigate).toHaveBeenCalled();
   });
+
+  it('should reveal form', () => {
+    const todoElement = ngMocks.find('.add-button');
+    todoElement.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    expect(ngMocks.find('.part-form')).toBeTruthy();
+  });
 });

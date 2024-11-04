@@ -7,14 +7,15 @@ import {Todo} from '../models/todo';
 })
 export class MockTodoApi implements InMemoryDbService {
 
-  createDb(): {} {
-    const todos: Todo[] = [
-      { id:0, title: 'todo in memory 1', isClosed: false, description: 'description in memory 1' },
-      { id:1, title: 'todo in memory 2', isClosed: false, description: 'description in memory 2' },
-      { id:2, title: 'todo in memory 3', isClosed: true },
-      { id:3, title: 'todo in memory 4', isClosed: false, description: 'description in memory 4' },
-    ];
-    return { todos };
+  private readonly todos: Todo[] = [
+    { id: 0, title: 'todo in memory 1', isClosed: false, description: 'description in memory 1', modified: new Date() },
+    { id: 1, title: 'todo in memory 2', isClosed: false, description: 'description in memory 2', modified: new Date()  },
+    { id: 2, title: 'todo in memory 3', isClosed: true, modified: new Date()  },
+    { id: 3, title: 'todo in memory 4', isClosed: false, description: 'description in memory 4', modified: new Date()  },
+  ];
+  createDb(): Record<string, Todo[]> {
+    
+    return { todos: this.todos };
   }
 
   generateId(todos: Todo[]): number {

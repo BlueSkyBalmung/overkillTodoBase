@@ -1,4 +1,4 @@
-import { TodoLoadGroup, TodoUpdateGroup } from './actions';
+import { TodoAddGroup, TodoLoadGroup, TodoUpdateGroup } from './actions';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
@@ -41,6 +41,17 @@ export class Effects {
       )
     )
   );
+
+  addTodo$ = createEffect(() => 
+    this.actions$.pipe(
+      ofType(TodoAddGroup.addTodo),
+      mergeMap(({ todo }) =>
+        this.todoService.add(todo).pipe(
+          map((todo) => TodoAddGroup.addTodoSuccess({ todo })),
+          catchError(() => [TodoAddGroup.addTodoFailed()])
+        )
+      )
+    ));
 
   constructor(private readonly actions$: Actions, private readonly todoService: TodoService) {}
 }

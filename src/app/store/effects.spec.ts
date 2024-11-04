@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Actions } from '@ngrx/effects';
 import { TodoService } from '../services/todo.service';
 import { cold, hot } from 'jasmine-marbles';
-import { TodoLoadGroup, TodoUpdateGroup} from './actions';
+import { TodoAddGroup, TodoLoadGroup, TodoUpdateGroup} from './actions';
 import { Todo } from '../models/todo';
 import { MockBuilder } from 'ng-mocks';
 import { AppModule } from '../app.module';
@@ -13,7 +13,7 @@ import { AppModule } from '../app.module';
 describe('Effects', () => {
   let effects: Effects;
   let actions: Observable<Actions>;
-  const todoService = jasmine.createSpyObj<TodoService>('TodoService', ['list', 'get', 'update']);
+  const todoService = jasmine.createSpyObj<TodoService>('TodoService', ['list', 'get', 'update', 'add']);
 
   beforeEach(() =>
     MockBuilder(Effects, AppModule)
@@ -32,7 +32,7 @@ describe('Effects', () => {
 
   describe('loadTodos$', () => {
     it('should dispatch loadTodosSuccess action when todoService.list return a result', () => {
-      const mockedTodos: Todo[] = [{ id:0, title: 'aTitle', isClosed: true }];
+      const mockedTodos: Todo[] = [{ id:0, title: 'aTitle', isClosed: true, modified: new Date() }];
       todoService.list.and.returnValue(of(mockedTodos));
 
       actions = hot('-a-', {
@@ -61,7 +61,7 @@ describe('Effects', () => {
 
   describe('loadTodo$', () => {
     it('should dispatch loadTodoSuccess action when todoService.get return a result', () => {
-      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true  };
+      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true, modified: new Date()  };
       todoService.get.and.returnValue(of(mockedTodos));
 
       actions = hot('-a-', {
@@ -90,7 +90,7 @@ describe('Effects', () => {
 
   describe('updateTodo$', () => {
     it('should dispatch updateTodoSuccess action when todoService.update return a result', () => {
-      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true };
+      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true, modified: new Date() };
       todoService.update.and.returnValue(of(mockedTodos));
 
       actions = hot('-a-', {
@@ -104,7 +104,7 @@ describe('Effects', () => {
     });
 
     it('should dispatch updateTodoFailed action when todoService.update fails', () => {
-      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true  };
+      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true, modified: new Date()  };
       todoService.update.and.returnValue(cold('#'));
 
       actions = hot('-a-', {
@@ -118,4 +118,33 @@ describe('Effects', () => {
     });
   });
 
+  describe('addTodo$', () => {
+    it('should dispatch addTodoSuccess action when todoService.add return a result', () => {
+      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true, modified: new Date()  };
+      todoService.add.and.returnValue(of(mockedTodos));
+
+      actions = hot('-a-', {
+        a: TodoAddGroup.addTodo({ todo: mockedTodos }),
+      });
+      const expected = cold('-b-', {
+        b: TodoAddGroup.addTodoSuccess({ todo: mockedTodos }),
+      });
+
+      expect(effects.addTodo$).toBeObservable(expected);
+    });
+
+    it('should dispatch addTodoFailed action when todoService.add fails', () => {
+      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true, modified: new Date()  };
+      todoService.add.and.returnValue(cold('#'));
+
+      actions = hot('-a-', {
+        a: TodoAddGroup.addTodo({ todo: mockedTodos }),
+      });
+      const expected = cold('-b-', {
+        b: TodoAddGroup.addTodoFailed(),
+      });
+
+      expect(effects.addTodo$).toBeObservable(expected);
+    });
+  });
 });

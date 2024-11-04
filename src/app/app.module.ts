@@ -12,7 +12,8 @@ import { MatButtonModule } from '@angular/material/button'
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {FormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {StoreModule} from '@ngrx/store';
 import {todosReducer} from './store/reducer';
 import {environment} from '../environments/environment';
@@ -23,12 +24,14 @@ import {HttpClientModule} from '@angular/common/http';
 import {MockTodoApi} from './services/mock-todo-api';
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import { TodoDetailComponent } from './todo-detail/todo-detail.component';
+import { TodoFormComponent } from './todo-form/todo-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoListComponent,
-    TodoDetailComponent
+    TodoDetailComponent,
+    TodoFormComponent
   ],
   imports: [
     BrowserModule,
@@ -36,10 +39,12 @@ import { TodoDetailComponent } from './todo-detail/todo-detail.component';
     MatToolbarModule,
     MatIconModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     MatCardModule,
     MatListModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatFormFieldModule,
     FormsModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(MockTodoApi),
