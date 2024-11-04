@@ -7,6 +7,9 @@ export const TodoLoadGroup = createActionGroup({
     'Load todos': emptyProps(),
     'Load todos success': props<{ todos: Todo[] }>(),
     'Load todos failed': emptyProps(),
+    'Load todo': props<{ id: number }>(),
+    'Load todo success': props<{ todo: Todo }>(),
+    'Load todo failed': emptyProps(),
   }
 });
 

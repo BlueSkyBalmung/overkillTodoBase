@@ -18,6 +18,18 @@ export class Effects {
     )
   );
 
+  loadTodo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TodoLoadGroup.loadTodo),
+      mergeMap(({ id }) =>
+        this.todoService.get(id).pipe(
+          map((todo) => TodoLoadGroup.loadTodoSuccess({ todo })),
+          catchError(() => [TodoLoadGroup.loadTodoFailed()])
+        )
+      )
+    )
+  );
+
   updateTodo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TodoUpdateGroup.updateTodo),
@@ -30,5 +42,5 @@ export class Effects {
     )
   );
 
-  constructor(private actions$: Actions, private todoService: TodoService) {}
+  constructor(private readonly actions$: Actions, private readonly todoService: TodoService) {}
 }

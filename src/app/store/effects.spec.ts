@@ -13,7 +13,7 @@ import { AppModule } from '../app.module';
 describe('Effects', () => {
   let effects: Effects;
   let actions: Observable<Actions>;
-  const todoService = jasmine.createSpyObj<TodoService>('TodoService', ['list', 'update']);
+  const todoService = jasmine.createSpyObj<TodoService>('TodoService', ['list', 'get', 'update']);
 
   beforeEach(() =>
     MockBuilder(Effects, AppModule)
@@ -28,7 +28,7 @@ describe('Effects', () => {
 
   beforeEach(() => {
     effects = TestBed.inject(Effects);
-  })
+  });
 
   describe('loadTodos$', () => {
     it('should dispatch loadTodosSuccess action when todoService.list return a result', () => {
@@ -56,6 +56,35 @@ describe('Effects', () => {
       });
 
       expect(effects.loadTodos$).toBeObservable(expected);
+    });
+  });
+
+  describe('loadTodo$', () => {
+    it('should dispatch loadTodoSuccess action when todoService.get return a result', () => {
+      const mockedTodos: Todo = { id: 0, title: 'aTitle', isClosed: true  };
+      todoService.get.and.returnValue(of(mockedTodos));
+
+      actions = hot('-a-', {
+        a: TodoLoadGroup.loadTodo({ id: 0}),
+      });
+      const expected = cold('-b-', {
+        b: TodoLoadGroup.loadTodoSuccess({ todo: mockedTodos }),
+      });
+
+      expect(effects.loadTodo$).toBeObservable(expected);
+    });
+
+    it('should dispatch loadTodoFailed action when todoService.get fails', () => {
+      todoService.get.and.returnValue(cold('#'));
+
+      actions = hot('-a-', {
+        a: TodoLoadGroup.loadTodo({ id: 0}),
+      });
+      const expected = cold('-b-', {
+        b: TodoLoadGroup.loadTodoFailed(),
+      });
+
+      expect(effects.loadTodo$).toBeObservable(expected);
     });
   });
 

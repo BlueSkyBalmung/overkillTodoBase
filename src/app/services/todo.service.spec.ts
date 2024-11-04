@@ -49,6 +49,29 @@ describe('TodoService', () => {
     httpMock.verify();
   });
 
+  it('should get todo', (done: DoneFn) => {
+    const mockedTodo: Todo = { id: 0, title: 'todoTitle', isClosed: true };
+
+    service
+      .get(0)
+      .pipe(first())
+      .subscribe({
+        next: (res: Todo) => {
+          expect(res).toEqual(mockedTodo);
+          done();
+        },
+        error: done.fail
+      });
+
+    const req = httpMock.expectOne(
+      (r) => r.url === `${environment.baseUrl}/api/todos/0`
+    );
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(mockedTodo);
+  });
+
+
   it('should update todo', (done: DoneFn) => {
     const mockedTodo: Todo = { id: 0, title: 'todoTitle', isClosed: true };
 

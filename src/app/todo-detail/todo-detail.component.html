@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-card-title>Todo detail</mat-card-title>
+  <mat-card-content>
+      <ng-container *ngIf="!(loading$ | async)">
+          <mat-list>
+              <mat-list-item>
+                <h4 matListItemTitle>Title :</h4>
+                <p matListItemLine>{{(todo$ | async)?.title}}</p>
+              </mat-list-item>
+              <mat-list-item>
+                <h4 matListItemTitle>Description :</h4>
+                <p matListItemLine>{{(todo$ | async)?.description}}</p>
+              </mat-list-item>
+            </mat-list>
+          <button mat-raised-button color="primary" routerLink="/">Back</button>
+      </ng-container>
+      <ng-container *ngIf="loading$ | async">
+          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </ng-container>
+  </mat-card-content>
+</mat-card>

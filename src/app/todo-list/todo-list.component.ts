@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {Todo} from '../models/todo';
 import {Store} from '@ngrx/store';
 import {selectLoading, selectTodos} from '../store/selectors';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-todo-list',
@@ -15,7 +16,7 @@ export class TodoListComponent implements OnInit {
   todos$: Observable<ReadonlyArray<Todo>>;
   loading$: Observable<boolean>;
 
-  constructor(private readonly store: Store) {
+  constructor(private readonly store: Store, private readonly router: Router) {
     this.todos$ = this.store.select(selectTodos);
     this.loading$ = this.store.select(selectLoading);
   }
@@ -26,5 +27,9 @@ export class TodoListComponent implements OnInit {
 
   onCheck(todo: Todo): void {
     this.store.dispatch(TodoUpdateGroup.updateTodo({ todo : {isClosed: !todo.isClosed, title: todo.title, id: todo.id } }));
+  }
+
+  onDetailClick(todo: Todo): void {
+    this.router.navigate(['/todo', todo.id]);
   }
 }

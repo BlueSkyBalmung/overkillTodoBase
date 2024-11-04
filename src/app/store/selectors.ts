@@ -12,3 +12,8 @@ export const selectLoading = createSelector(
   getState,
   (state: State) => state.loading,
 );
+
+export const selectDisplayedTodo = createSelector(
+  getState,
+  (state: State) => state.displayedTodo,
+);

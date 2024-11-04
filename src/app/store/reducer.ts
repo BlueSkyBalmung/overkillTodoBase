@@ -6,6 +6,7 @@ export const featureKey = 'todosStore';
 
 export interface State {
   todos: ReadonlyArray<Todo>;
+  displayedTodo?: Todo;
   loading: boolean
 }
 
@@ -33,6 +34,19 @@ export const todosReducer = createReducer(
       loading: false
     })
   ),
+  on(TodoLoadGroup.loadTodo, (state) => {
+    return {
+      ...state,
+      loading: true,
+    };
+  }),
+  on(TodoLoadGroup.loadTodoSuccess, (state, { todo }) => {
+    return {
+      ...state,
+      displayedTodo: todo,
+      loading: false,
+    };
+  }),
   on(TodoUpdateGroup.updateTodoSuccess, (state, { todo }) => {
     const updateTodoList = [...state.todos]
     .map((t) => (t.id === todo.id ? todo : t))

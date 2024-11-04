@@ -28,6 +28,18 @@ describe('Reducer', () => {
     });
   });
 
+  describe('loadTodo action', () => {
+    it('should retrieve todo and update the state', () => {
+      const { initialState } = fromReducer;
+      const action = TodoLoadGroup.loadTodo({ id: 0});
+
+      const state = fromReducer.todosReducer(initialState, action);
+
+      expect(state.loading).toBeTrue();
+      expect(state).not.toBe(initialState);
+    });
+  });
+
 
   describe('loadTodosSuccess action', () => {
     it('should retrieve all todos and update the state', () => {
@@ -41,6 +53,21 @@ describe('Reducer', () => {
 
       expect(state).toEqual(newState);
       expect(state).not.toBe(newState);
+    });
+  });
+
+  describe('loadTodoSuccess action', () => {
+    it('should retrieve todo and update the state', () => {
+      const { initialState } = fromReducer;
+      const newTodo: Todo = { id: 0, title: 'aTitle', isClosed: false };
+      const action = TodoLoadGroup.loadTodoSuccess({
+        todo: newTodo,
+      });
+
+      const state = fromReducer.todosReducer(initialState, action);
+
+      expect(state.displayedTodo).toEqual(newTodo);
+      expect(state.displayedTodo).toBe(newTodo);
     });
   });
 

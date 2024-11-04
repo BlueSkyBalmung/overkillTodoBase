@@ -1,5 +1,5 @@
 import {State} from './reducer';
-import {selectLoading, selectTodos} from './selectors';
+import {selectDisplayedTodo, selectLoading, selectTodos} from './selectors';
 
 describe('Selectors', () => {
   const initialState: State = {
@@ -15,8 +15,13 @@ describe('Selectors', () => {
     expect(result).toEqual(initialState.todos);
   });
 
-  it('should select loading displayed', () => {
+  it('should select loading ', () => {
     const result = selectLoading.projector(initialState);
     expect(result).toEqual(initialState.loading);
+  });
+
+  it('should select displayed todo', () => {
+    const result = selectDisplayedTodo.projector(initialState);
+    expect(result).toEqual(initialState.displayedTodo);
   });
 });

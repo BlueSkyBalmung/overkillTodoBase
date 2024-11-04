@@ -74,4 +74,10 @@ describe('TodoListComponent', () => {
     expect(ngMocks.get(checkboxs[checkboxs.length - 1], MatCheckbox).checked).toBeTrue();
     expect(Boolean(ngMocks.get(checkboxs[checkboxs.length - 1], MatCheckbox).disabled)).toBeTrue();
   });
+
+  it('should redirect to detail',() => {
+    const todoElement = ngMocks.find('a');
+    todoElement.triggerEventHandler('click', null);
+    expect(router.navigate).toHaveBeenCalled();
+  });
 });
